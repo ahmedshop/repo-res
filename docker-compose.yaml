@@ -1,0 +1,53 @@
+services:
+  frontend:
+    container_name: resto_frontend
+    build: ./client-resto
+    volumes:
+      - ./client-resto:/app
+      - /app/node_modules
+    ports:
+      - '5173:5173'
+    command: npm run dev -- --host
+  backend:
+    container_name: resto_backend
+    build: ./resto-server
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./resto-server:/app
+      - /app/node_modules
+      - /app/vendor
+    environment:
+      - DB_CONNECTION=${DB_CONNECTION}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: resto_db
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    ports:
+      - 9001:80
+    environment:
+      - PMA_ARBITRARY=1
+
+volumes:
+  db_data:
