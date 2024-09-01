@@ -26,13 +26,22 @@ class MenuItemController extends Controller
         return response()->json($menuItem, 201);
     }
 
-    public function show(MenuItem $menuItem)
+    public function show($id) 
     {
+        $menuItem = MenuItem::find($id); 
+        if (!$menuItem) {
+            return response()->json(['error' => 'Menu item not found'], 404);
+        }
         return $menuItem;
     }
 
-    public function update(Request $request, MenuItem $menuItem)
+    public function update(Request $request, $id) 
     {
+        $menuItem = MenuItem::find($id);  
+        if (!$menuItem) {
+            return response()->json(['error' => 'Menu item not found'], 404);
+        }
+
         $validatedData = $request->validate([
             'name' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
@@ -45,10 +54,14 @@ class MenuItemController extends Controller
         return response()->json($menuItem, 200);
     }
 
-    public function destroy(MenuItem $menuItem)
+    public function destroy($id)  
     {
-        $menuItem->delete();
+        $menuItem = MenuItem::find($id); 
+        if (!$menuItem) {
+            return response()->json(['error' => 'Menu item not found'], 404);
+        }
 
+        $menuItem->delete();
         return response()->json(null, 204);
     }
 }
