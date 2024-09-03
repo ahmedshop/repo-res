@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import customAxios from '../config/axios';
 import { toast } from 'react-toastify';
 
-
 export const useMenuItems = (onCloseModal) => {
   const [data, setData] = useState([]);
+  const [categories, setCategories] = useState([]); // State to store categories
   const [currentItem, setCurrentItem] = useState(null);
   const [formValues, setFormValues] = useState({
     name: '',
@@ -14,11 +14,14 @@ export const useMenuItems = (onCloseModal) => {
   });
   const [errors, setErrors] = useState({});
 
+  // Fetch menu items and categories on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await customAxios.get('/menu-items');
-        setData(response.data);
+        const menuItemsResponse = await customAxios.get('/menu-items');
+        const categoriesResponse = await customAxios.get('/categories');
+        setData(menuItemsResponse.data);
+        setCategories(categoriesResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
         toast.error('Error fetching data');
@@ -27,6 +30,12 @@ export const useMenuItems = (onCloseModal) => {
 
     fetchData();
   }, []);
+
+  // Map category IDs to names for easier access
+  const categoryMap = categories.reduce((acc, category) => {
+    acc[category.id] = category.name;
+    return acc;
+  }, {});
 
   const handleEdit = (item) => {
     setCurrentItem(item);
@@ -98,7 +107,11 @@ export const useMenuItems = (onCloseModal) => {
   };
 
   return {
-    data,
+    data: data.map(item => ({
+      ...item,
+      category_name: categoryMap[item.category_id] || 'Unknown', // Add category name to data
+    })),
+    categories,
     currentItem,
     formValues,
     errors,

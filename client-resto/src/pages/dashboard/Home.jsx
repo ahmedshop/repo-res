@@ -16,6 +16,7 @@ const Home = () => {
 
   const {
     data,
+    categories, // Get categories
     currentItem,
     formValues,
     errors,
@@ -53,8 +54,8 @@ const Home = () => {
             accessor: 'price',
           },
           {
-            Header: 'Category ID',
-            accessor: 'category_id',
+            Header: 'Category',
+            accessor: 'category_name', // Updated to category_name
           },
           {
             Header: 'Actions',
@@ -91,6 +92,7 @@ const Home = () => {
         handleInputChange={handleInputChange}
         handleSave={handleSave}
         onClose={handleCloseModal}
+        categories={categories} // Pass categories
       />
     </div>
   );

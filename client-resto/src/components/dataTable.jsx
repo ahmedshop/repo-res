@@ -35,22 +35,25 @@ const DataTable = ({ columns, data }) => {
         <thead className="bg-gray-800 text-white">
           {headerGroups.map(headerGroup => (
             <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th
-                  key={column.id}
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className="p-4 text-left text-sm font-medium uppercase tracking-wider"
-                >
-                  {column.render('Header')}
-                  <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? ' 🔽'
-                        : ' 🔼'
-                      : ''}
-                  </span>
-                </th>
-              ))}
+              {headerGroup.headers.map(column => {
+                const { key, ...headerProps } = column.getHeaderProps(column.getSortByToggleProps());
+                return (
+                  <th
+                    key={column.id}
+                    {...headerProps}
+                    className="p-4 text-left text-sm font-medium uppercase tracking-wider"
+                  >
+                    {column.render('Header')}
+                    <span>
+                      {column.isSorted
+                        ? column.isSortedDesc
+                          ? ' 🔽'
+                          : ' 🔼'
+                        : ''}
+                    </span>
+                  </th>
+                );
+              })}
             </tr>
           ))}
         </thead>
@@ -59,19 +62,22 @@ const DataTable = ({ columns, data }) => {
             prepareRow(row);
             return (
               <tr key={row.id} {...row.getRowProps()} className="border-b">
-                {row.cells.map(cell => (
-                  <td
-                    key={cell.column.id}
-                    {...cell.getCellProps()}
-                    className="p-4 text-sm text-gray-900"
-                  >
-                    {cell.column.id === 'price'
-                      ? typeof cell.value === 'number'
-                        ? `$${cell.value.toFixed(2)}`
-                        : '$0.00'
-                      : cell.render('Cell')}
-                  </td>
-                ))}
+                {row.cells.map(cell => {
+                  const { key, ...cellProps } = cell.getCellProps();
+                  return (
+                    <td
+                      key={cell.column.id}
+                      {...cellProps}
+                      className="p-4 text-sm text-gray-900"
+                    >
+                      {cell.column.id === 'price'
+                        ? typeof cell.value === 'number'
+                          ? `$${cell.value.toFixed(2)}`
+                          : '$0.00'
+                        : cell.render('Cell')}
+                    </td>
+                  );
+                })}
               </tr>
             );
           })}
@@ -118,3 +124,4 @@ const DataTable = ({ columns, data }) => {
 };
 
 export default DataTable;
+

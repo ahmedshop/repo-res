@@ -17,16 +17,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       <nav className="flex flex-col justify-between h-full">
         <div className="mt-16">
           <Link to="/home" className="flex items-center p-4 hover:bg-gray-700" onClick={toggleSidebar}>
-            <i className="fas fa-home mr-3"></i>
-            Home
+            <i className="fas fa-utensils mr-3"></i> {/* Updated icon */}
+            Meals
           </Link>
           <Link to="/charts" className="flex items-center p-4 hover:bg-gray-700" onClick={toggleSidebar}>
-            <i className="fas fa-chart-bar mr-3"></i>
-            Charts
+            <i className="fas fa-chart-pie mr-3"></i> {/* Updated icon */}
+            Categories
           </Link>
           <Link to="/settings" className="flex items-center p-4 hover:bg-gray-700" onClick={toggleSidebar}>
-            <i className="fas fa-cog mr-3"></i>
-            Settings
+            <i className="fas fa-cogs mr-3"></i> {/* Updated icon */}
+            Orders
           </Link>
         </div>
         <div className="flex items-center mb-4 p-4 space-x-4">
